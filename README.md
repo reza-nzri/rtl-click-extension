@@ -1,4 +1,4 @@
-# <img src="logo.png" alt="ChatGPT Direction Toggle Logo" width="25px" style="border-radius:5px; vertical-align:middle;"> **ChatGPT Direction Toggle**
+# <img src="logo-1.png" alt="ChatGPT Direction Toggle Logo" width="25px" style="border-radius:8px; vertical-align:middle;"> **ChatGPT Direction Toggle**
 
 Tampermonkey / Greasemonkey userscript that adds a simple **LTR ↔ RTL toggle button** to ChatGPT.  
 It lets you switch the direction of all chat messages and input fields with a single click.
