@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         ChatGPT Direction Toggle (Menu-based)
+// @name         ChatGPT Direction Toggle
 // @namespace    https://github.com/sasha/chatgpt-direction-toggle
 // @version      1.1
 // @description  Toggle ChatGPT text direction LTR/RTL via Tampermonkey menu (no in-page button).
