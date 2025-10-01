@@ -96,3 +96,5 @@ Use at your own risk. The author assumes no responsibility for any consequences 
 ### 🤝 Contributing
 
 Contributions, bug reports, and feature ideas are welcome!  
+
+[![Reza Nazari](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/127698692?v=4&w=35&h=35&mask=circle)](https://github.com/reza-nzri)
