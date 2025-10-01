@@ -6,7 +6,10 @@ It lets you switch the direction of all chat messages and input fields with a si
 <details>
 <summary><h2>🖥 Demo</h2></summary>
 
-<img width="600" alt="Demo Screenshot - ChatGPT Direction Toggle" src="./demo.png" />
+<img width="600" alt="Demo Screenshot - ChatGPT Direction Toggle" src="https://github.com/user-attachments/assets/b1b641db-7af6-455a-b49d-ef19b5691355" />
+<img width="678" height="277" alt="RTL" src="https://github.com/user-attachments/assets/ec7e7a0d-ff81-4656-a5ad-9b5314df6ff8" />
+<img width="683" height="291" alt="LTR" src="https://github.com/user-attachments/assets/333adace-f64c-48db-bdd8-35ddc4707a41" />
+
 
 <details>
   <summary><h3>Explained</h3></summary>
