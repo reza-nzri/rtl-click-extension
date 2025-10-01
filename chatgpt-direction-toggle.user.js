@@ -1,32 +1,30 @@
 // ==UserScript==
-// @name         ChatGPT LTR/RTL Toggle
-// @namespace    https://sasha.tools
-// @version      1.0
-// @description  Toggle chat text direction (LTR/RTL) on ChatGPT with one click
+// @name         ChatGPT Direction Toggle (Menu-based)
+// @namespace    https://github.com/sasha/chatgpt-direction-toggle
+// @version      1.1
+// @description  Toggle ChatGPT text direction LTR/RTL via Tampermonkey menu (no in-page button).
 // @author       Reza Nazari
 // @match        https://chat.openai.com/*
 // @match        https://chatgpt.com/*
-// @run-at       document-idle
+// @run-at       document-end
 // @grant        GM_addStyle
+// @grant        GM_registerMenuCommand
+// @grant        GM_getValue
+// @grant        GM_setValue
 // ==/UserScript==
 
 (function () {
   'use strict';
 
-  const KEY = 'chatgpt_dir_mode'; // 'ltr' | 'rtl'
-  const initial = localStorage.getItem(KEY) || 'ltr';
+  const KEY = 'dirMode'; // 'ltr' | 'rtl'
+  const mode = GM_getValue(KEY, 'ltr');
 
-  // Styles scoped via body class to avoid breaking whole UI layout
+  // Styles scoped with body class; do NOT alter layout frames, only text direction.
   GM_addStyle(`
+    body.chatdir-rtl [data-message-author-role],
     body.chatdir-rtl [data-message-author-role] .markdown,
     body.chatdir-rtl [data-message-author-role] .prose,
     body.chatdir-rtl .text-message,
-    body.chatdir-rtl .prose,
-    body.chatdir-rtl [data-message-author-role] {
-      direction: rtl !important;
-      text-align: right !important;
-      unicode-bidi: plaintext !important;
-    }
     body.chatdir-rtl textarea,
     body.chatdir-rtl [contenteditable="true"] {
       direction: rtl !important;
@@ -34,85 +32,50 @@
       unicode-bidi: plaintext !important;
     }
 
+    body.chatdir-ltr [data-message-author-role],
     body.chatdir-ltr [data-message-author-role] .markdown,
     body.chatdir-ltr [data-message-author-role] .prose,
     body.chatdir-ltr .text-message,
-    body.chatdir-ltr .prose,
-    body.chatdir-ltr [data-message-author-role] {
-      direction: ltr !important;
-      text-align: left !important;
-      unicode-bidi: plaintext !important;
-    }
     body.chatdir-ltr textarea,
     body.chatdir-ltr [contenteditable="true"] {
       direction: ltr !important;
       text-align: left !important;
       unicode-bidi: plaintext !important;
     }
-
-    /* Toggle button */
-    #dirToggleBtn {
-      position: fixed;
-      bottom: 14px;
-      right: 14px;
-      z-index: 99999;
-      padding: 8px 12px;
-      background: #111;
-      color: #fff;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.2);
-      font-size: 12px;
-      line-height: 1;
-      cursor: pointer;
-      user-select: none;
-      opacity: 0.9;
-    }
-    #dirToggleBtn:hover { opacity: 1; }
   `);
 
-  function apply(mode) {
-    document.body.classList.toggle('chatdir-rtl', mode === 'rtl');
-    document.body.classList.toggle('chatdir-ltr', mode === 'ltr');
-    localStorage.setItem(KEY, mode);
-    updateBtn(mode);
+  function apply(m) {
+    const b = document.body;
+    if (!b) return;
+    b.classList.toggle('chatdir-rtl', m === 'rtl');
+    b.classList.toggle('chatdir-ltr', m === 'ltr');
+    // also set logical dir for caret/selection in inputs
+    document.documentElement.setAttribute('dir', m);
   }
 
-  function updateBtn(mode) {
-    const btn = document.getElementById('dirToggleBtn');
-    if (btn) btn.textContent = mode === 'rtl' ? 'RTL • Click for LTR' : 'LTR • Click for RTL';
+  function setMode(m) {
+    GM_setValue(KEY, m);
+    apply(m);
   }
 
-  function makeBtn() {
-    if (document.getElementById('dirToggleBtn')) return;
-    const btn = document.createElement('button');
-    btn.id = 'dirToggleBtn';
-    btn.addEventListener('click', () => {
-      const next = (localStorage.getItem(KEY) || 'ltr') === 'rtl' ? 'ltr' : 'rtl';
-      apply(next);
-    });
-    document.body.appendChild(btn);
-    updateBtn(localStorage.getItem(KEY) || 'ltr');
-  }
+  // Initial apply (no observers, no heavy loops)
+  apply(mode);
 
-  // Handle SPA navigations / dynamic DOM
-  const ensure = () => {
-    makeBtn();
-    apply(localStorage.getItem(KEY) || initial);
-  };
+  // Menu commands (open Tampermonkey icon → this script → choose an action)
+  GM_registerMenuCommand(`Toggle (current: ${mode.toUpperCase()})`, () => {
+    const next = (GM_getValue(KEY, 'ltr') === 'rtl') ? 'ltr' : 'rtl';
+    setMode(next);
+    alert(`Direction: ${next.toUpperCase()}`);
+  });
+  GM_registerMenuCommand('Force RTL', () => setMode('rtl'));
+  GM_registerMenuCommand('Force LTR', () => setMode('ltr'));
 
-  // Initial
-  ensure();
-
-  // Watch for route/content changes
-  const mo = new MutationObserver(() => ensure());
-  mo.observe(document.documentElement, { subtree: true, childList: true });
-
-  // Optional: keyboard shortcut Alt+R
+  // Optional: quick keyboard toggle without adding any DOM UI
   window.addEventListener('keydown', (e) => {
     if (e.altKey && (e.key === 'r' || e.key === 'R')) {
       e.preventDefault();
-      const next = (localStorage.getItem(KEY) || 'ltr') === 'rtl' ? 'ltr' : 'rtl';
-      apply(next);
+      const next = (GM_getValue(KEY, 'ltr') === 'rtl') ? 'ltr' : 'rtl';
+      setMode(next);
     }
-  });
+  }, { passive: false });
 })();
