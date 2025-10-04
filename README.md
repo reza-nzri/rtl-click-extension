@@ -8,6 +8,7 @@ Perfect for **Persian, Arabic, Hebrew** users who need proper right-to-left supp
   
 <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/542ea778-334d-4d45-82c2-51aa9c50b5f8" />
 <img width="500" height="514" alt="image" src="https://github.com/user-attachments/assets/26ef73d9-3b57-48db-9ea6-5de9146d7946" />
+<img width="100" height="186" alt="Screenshot 2025-10-04 230338" src="https://github.com/user-attachments/assets/d7f8977b-d9f1-4034-85cc-0ffb4d979b50" />
 
 <details>
   <summary><h3>Explained</h3></summary>
