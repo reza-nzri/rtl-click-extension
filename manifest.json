@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGPT RTL Click Toggle",
+  "version": "1.1.0",
+  "description": "Toggle RTL on ChatGPT by clicking the extension icon.",
+  "permissions": ["storage", "tabs"],
+  "background": { "service_worker": "bg.js" },
+  "action": { "default_title": "Toggle RTL" },
+  "icons": { "128": "logo-1.png" },
+  "content_scripts": [
+    {
+      "matches": ["https://chat.openai.com/*", "https://chatgpt.com/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ]
+}

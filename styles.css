@@ -1,0 +1,16 @@
+html.chatgpt-rtl-on[dir="rtl"],
+html.chatgpt-rtl-on[dir="rtl"] body { direction: rtl !important; }
+
+html.chatgpt-rtl-on[dir="rtl"] body,
+html.chatgpt-rtl-on[dir="rtl"] [data-message-author-role],
+html.chatgpt-rtl-on[dir="rtl"] [data-message-author-role] .markdown,
+html.chatgpt-rtl-on[dir="rtl"] [data-message-author-role] .prose,
+html.chatgpt-rtl-on[dir="rtl"] .text-message,
+html.chatgpt-rtl-on[dir="rtl"] textarea,
+html.chatgpt-rtl-on[dir="rtl"] input[type="text"],
+html.chatgpt-rtl-on[dir="rtl"] input[type="search"],
+html.chatgpt-rtl-on[dir="rtl"] [contenteditable="true"] {
+  direction: rtl !important;
+  text-align: right !important;
+  unicode-bidi: plaintext !important;
+}
