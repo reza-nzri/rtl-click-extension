@@ -5,10 +5,9 @@ Perfect for **Persian, Arabic, Hebrew** users who need proper right-to-left supp
 
 <details>
 <summary><h2>🖥 Demo</h2></summary>
-
-<img width="600" alt="Demo Screenshot - ChatGPT Direction Toggle" src="https://github.com/user-attachments/assets/b1b641db-7af6-455a-b49d-ef19b5691355" />
-<img width="678" height="277" alt="RTL" src="https://github.com/user-attachments/assets/ec7e7a0d-ff81-4656-a5ad-9b5314df6ff8" />
-<img width="683" height="291" alt="LTR" src="https://github.com/user-attachments/assets/333adace-f64c-48db-bdd8-35ddc4707a41" />
+  
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/542ea778-334d-4d45-82c2-51aa9c50b5f8" />
+<img width="500" height="514" alt="image" src="https://github.com/user-attachments/assets/26ef73d9-3b57-48db-9ea6-5de9146d7946" />
 
 <details>
   <summary><h3>Explained</h3></summary>
