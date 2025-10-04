@@ -1,21 +1,23 @@
 // Background service worker
 // Handles icon clicks and updates the mode + dynamic icon text
 
-const KEY = 'mode'; // values: 'off' | 'rtl' | 'ltr'
+const KEY = "mode"; // values: 'off' | 'rtl' | 'ltr'
 
 async function getMode() {
   const r = await chrome.storage.sync.get(KEY);
-  return r[KEY] || 'off';
+  return r[KEY] || "off";
 }
-async function setMode(m) { await chrome.storage.sync.set({ [KEY]: m }); }
+async function setMode(m) {
+  await chrome.storage.sync.set({ [KEY]: m });
+}
 
 function drawIcon(label, opts) {
   // Draw a dynamic icon with text and border using OffscreenCanvas
   const sizes = [16, 32, 48, 128];
   const paths = {};
-  sizes.forEach(sz => {
+  sizes.forEach((sz) => {
     const c = new OffscreenCanvas(sz, sz);
-    const g = c.getContext('2d');
+    const g = c.getContext("2d");
 
     g.clearRect(0, 0, sz, sz);
 
@@ -38,8 +40,8 @@ function drawIcon(label, opts) {
     // Label text
     g.fillStyle = opts.text;
     g.font = `${Math.round(sz * 0.45)}px system-ui,Segoe UI,Arial`;
-    g.textAlign = 'center';
-    g.textBaseline = 'middle';
+    g.textAlign = "center";
+    g.textBaseline = "middle";
     g.fillText(label, sz / 2, sz / 2 + (sz >= 32 ? 1 : 0));
 
     paths[`${sz}`] = c.transferToImageBitmap();
@@ -48,22 +50,19 @@ function drawIcon(label, opts) {
 }
 
 async function updateUI(mode) {
-  if (mode === 'rtl') {
-    drawIcon('RTL', { border: '#00cc66', text: '#ffffff' });
-    await chrome.action.setTitle({ title: 'Mode: RTL (click for LTR)' });
-  } else if (mode === 'ltr') {
-    drawIcon('LTR', { border: '#999999', text: '#ffffff' });
-    await chrome.action.setTitle({ title: 'Mode: LTR (click for OFF)' });
+  if (mode === "rtl") {
+    await chrome.action.setBadgeText({ text: "RTL" });
+    await chrome.action.setBadgeBackgroundColor({ color: "#00cc66" }); // green
+    await chrome.action.setTitle({ title: "Mode: RTL (click for LTR)" });
+  } else if (mode === "ltr") {
+    await chrome.action.setBadgeText({ text: "LTR" });
+    await chrome.action.setBadgeBackgroundColor({ color: "#999999" }); // gray
+    await chrome.action.setTitle({ title: "Mode: LTR (click for OFF)" });
   } else {
-    // OFF → clear icon (transparent)
-    const sizes = [16, 32, 48, 128];
-    const imgs = {};
-    sizes.forEach(sz => {
-      const c = new OffscreenCanvas(sz, sz);
-      imgs[`${sz}`] = c.transferToImageBitmap();
-    });
-    await chrome.action.setIcon({ imageData: imgs });
-    await chrome.action.setTitle({ title: 'Mode: OFF (click for RTL)' });
+    // OFF → clear badge, show default logo
+    await chrome.action.setBadgeText({ text: "" });
+    await chrome.action.setTitle({ title: "Mode: OFF (click for RTL)" });
+    // the extension will display your default icon "logo-1.png"
   }
 }
 
@@ -74,11 +73,17 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 chrome.action.onClicked.addListener(async (tab) => {
   const current = await getMode();
-  const next = current === 'off' ? 'rtl' : current === 'rtl' ? 'ltr' : 'off';
+  const next = current === "off" ? "rtl" : current === "rtl" ? "ltr" : "off";
   await setMode(next);
   await updateUI(next);
 
-  if (tab && tab.id && /^https:\/\/(chat\.openai|chatgpt)\.com/.test(tab.url || '')) {
-    chrome.tabs.sendMessage(tab.id, { type: 'APPLY_MODE', mode: next }).catch(() => {});
+  if (
+    tab &&
+    tab.id &&
+    /^https:\/\/(chat\.openai|chatgpt)\.com/.test(tab.url || "")
+  ) {
+    chrome.tabs
+      .sendMessage(tab.id, { type: "APPLY_MODE", mode: next })
+      .catch(() => {});
   }
 });
