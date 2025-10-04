@@ -1,8 +1,7 @@
 # <img src="logo-1.png" alt="ChatGPT Direction Toggle Logo" width="25px" style="border-radius:8px; vertical-align:middle;"> **ChatGPT Direction Toggle**
 
-Tampermonkey / Greasemonkey userscript that adds a simple **LTR ↔ RTL toggle button** to ChatGPT.  
-Switch the direction of all chat messages and input fields with a single click or shortcut.
-
+A lightweight **Google Chrome Extension** that lets you instantly switch ChatGPT between **LTR ↔ RTL**.  
+Perfect for **Persian, Arabic, Hebrew** users who need proper right-to-left support.
 
 <details>
 <summary><h2>🖥 Demo</h2></summary>
@@ -13,58 +12,57 @@ Switch the direction of all chat messages and input fields with a single click o
 
 <details>
   <summary><h3>Explained</h3></summary>
-This userscript injects a floating button in the bottom-right corner:  
+This extension adds a simple toggle via the **browser toolbar icon**:  
 
 * **Click once** → Switch to **RTL** (Right-to-Left).  
 * **Click again** → Switch back to **LTR** (Left-to-Right).  
-* **Alt+R keyboard shortcut** for instant toggling.  
+* Shows a **green ON badge** when RTL mode is active.  
 
-**In short:** read and write in any direction you prefer.  
+**In short:** read and write in the direction you prefer with a single click.  
 </details>
 </details>
-
 
 <details>
 <summary><h2>💡 Why & Benefits</h2></summary>
 
-- Makes ChatGPT more usable for **RTL languages** (Persian, Arabic, Hebrew).  
-- Quick toggle without reloads or settings changes.  
+- Makes ChatGPT much more usable for **RTL languages** (Persian, Arabic, Hebrew).  
+- One-click toggle directly from the browser toolbar.  
 - Works seamlessly with **messages, input box, and editor**.  
-- Saves your last choice in **localStorage**.  
+- No external dependencies, no layout breaking.  
 
 </details>
-
 
 <details>
 <summary><h2>✨ Features</h2></summary>
 
-- Floating toggle button (**LTR/RTL**).  
-- Keyboard shortcut: **Alt+R**.  
+- Toggle via **extension icon click**.  
+- Badge indicator → shows **ON** when RTL is active.  
 - Persistent setting (remembers last mode).  
-- Compatible with dynamic ChatGPT DOM updates.  
-- Lightweight – no external dependencies.  
+- Compatible with ChatGPT dynamic DOM updates.  
+- Lightweight – no frameworks or extra libraries.  
 
 </details>
-
 
 <details>
 <summary><h2>⚙️ Installation</h2></summary>
 
-1. Install [Tampermonkey](https://www.tampermonkey.net/) (or a compatible userscript manager).  
-2. [Click here to install the script](./chatgpt-direction-toggle.user.js).  
-   *(or copy & paste into a new Tampermonkey script).*  
-3. Open [ChatGPT](https://chat.openai.com/) or [chatgpt.com](https://chatgpt.com/).  
-4. Use the **floating button or Alt+R** to toggle text direction.  
+This is a **local Chrome Extension** (not yet in the Chrome Web Store).  
+
+1. Clone or download this repository.  
+2. Open Chrome → go to `chrome://extensions/`.  
+3. Enable **Developer mode** (top-right).  
+4. Click **Load unpacked** and select the project folder.  
+5. A new icon appears in your toolbar.  
+6. **Click the icon** to toggle RTL/LTR in ChatGPT.  
 
 </details>
-
 
 <details>
 <summary><h2>❓ FAQ</h2></summary>
 
 <details>
 <summary><h3>🔹 Does it affect only ChatGPT?</h3></summary>
-Yes. The script runs only on <b>chat.openai.com</b> and <b>chatgpt.com</b>.
+Yes. The extension only runs on <b>chat.openai.com</b> and <b>chatgpt.com</b>.
 </details>
 
 <details>
@@ -73,44 +71,41 @@ No. It only modifies <b>text direction</b> and <b>alignment</b>.
 </details>
 
 <details>
-<summary><h3>🔹 How can I switch quickly?</h3></summary>
-Use the floating button or press <b>Alt+R</b>.
+<summary><h3>🔹 How can I see if RTL is enabled?</h3></summary>
+When RTL mode is ON, the extension icon shows a **green ON badge**.  
 </details>
 
 <details>
 <summary><h3>🔹 Does it save my last choice?</h3></summary>
-Yes. It uses <b>localStorage</b> to remember whether RTL or LTR was last active.  
+Yes. It uses <b>chrome.storage</b> to persist your last setting.  
 </details>
 
 </details>
-
 
 <details>
 <summary><h2>📌 Changelog</h2></summary>
 
-- **v1.1.0** – Updated logic for new ChatGPT DOM, improved persistence.  
-- **v1.0.0** – Initial release with button + Alt+R toggle.  
+- **v2.0.0** – Migrated from Tampermonkey userscript to full Chrome Extension (Manifest V3).  
+- **v1.1.0** – Improved toggle logic, persistence.  
+- **v1.0.0** – Initial userscript release with button + Alt+R shortcut.  
 
 </details>
-
 
 <details>
 <summary><h2>🔑 SEO Keywords</h2></summary>
 
-chatgpt rtl, chatgpt direction toggle, tampermonkey chatgpt, chatgpt persian arabic hebrew, rtl support chatgpt, greasemonkey chatgpt, chatgpt userscript rtl, chatgpt text alignment script  
+chatgpt rtl, chatgpt chrome extension, chatgpt rtl extension, rtl support chatgpt, persian arabic hebrew chatgpt, chatgpt direction toggle extension, chatgpt ltr rtl switch  
 
 </details>
-
 
 <details>
 <summary><h3>⚠️ Disclaimer</h3></summary>
 
-This project is created **for educational and personal learning purposes only**.  
+This project is created **for educational and personal use only**.  
 It is not affiliated with, endorsed by, or connected to **OpenAI** or **ChatGPT**.  
-Use at your own risk. The author assumes no responsibility for any consequences arising from use.  
+Use at your own risk. The author assumes no responsibility for any consequences arising from its use.  
 
 </details>
-
 
 ### 🤝 Contributing
 
