@@ -1,4 +1,4 @@
-# <img src="logo-1.png" alt="ChatGPT Direction Toggle Logo" width="25px" style="border-radius:8px; vertical-align:middle;"> **ChatGPT Direction Toggle**
+# <img src="logo-1.png" alt="Websites Direction Toggle Logo" width="25px" style="border-radius:8px; vertical-align:middle;"> **ChatGPT Direction Toggle**
 
 A lightweight **Google Chrome Extension** that lets you instantly switch ChatGPT between **LTR ↔ RTL**.  
 Perfect for **Persian, Arabic, Hebrew** users who need proper right-to-left support.
