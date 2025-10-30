@@ -1,5 +1,5 @@
 // Content script
-// Applies direction changes to the ChatGPT page
+// Applies direction changes to the websites page
 
 (() => {
   'use strict';
@@ -10,7 +10,7 @@
     if (!html || !body) return;
 
     // Reset any previous settings
-    html.classList.remove('chatgpt-rtl-on', 'chatgpt-ltr-on');
+    html.classList.remove('rtl-on', 'ltr-on');
     ['dir'].forEach(attr => {
       if (html.hasAttribute(attr)) html.removeAttribute(attr);
       if (body.hasAttribute(attr)) body.removeAttribute(attr);
@@ -20,11 +20,11 @@
     if (mode === 'rtl') {
       html.setAttribute('dir', 'rtl');
       body.setAttribute('dir', 'rtl');
-      html.classList.add('chatgpt-rtl-on');
+      html.classList.add('rtl-on');
     } else if (mode === 'ltr') {
       html.setAttribute('dir', 'ltr');
       body.setAttribute('dir', 'ltr');
-      html.classList.add('chatgpt-ltr-on');
+      html.classList.add('ltr-on');
     }
     // off → no changes (default site)
   }

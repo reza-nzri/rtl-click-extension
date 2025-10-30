@@ -1,15 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "ChatGPT RTL Click Toggle",
+  "name": "RTL Click Toggle",
   "version": "1.0.0",
   "description": "Click icon to cycle: RTL → LTR → OFF.",
   "permissions": ["storage", "tabs"],
+  "host_permissions": ["<all_urls>"],
   "background": { "service_worker": "bg.js" },
   "action": { "default_title": "Toggle RTL/LTR" },
   "icons": { "128": "logo-1.png" },
   "content_scripts": [
     {
-      "matches": ["https://chat.openai.com/*", "https://chatgpt.com/*"],
+      "matches": ["<all_urls>"],
       "js": ["content.js"],
       "css": ["styles.css"],
       "run_at": "document_end"

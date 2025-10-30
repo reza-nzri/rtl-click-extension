@@ -77,13 +77,9 @@ chrome.action.onClicked.addListener(async (tab) => {
   await setMode(next);
   await updateUI(next);
 
-  if (
-    tab &&
-    tab.id &&
-    /^https:\/\/(chat\.openai|chatgpt)\.com/.test(tab.url || "")
-  ) {
-    chrome.tabs
-      .sendMessage(tab.id, { type: "APPLY_MODE", mode: next })
-      .catch(() => {});
+  // Send the new mode to the active tab if it's a regular web page (http or https).
+  // Content scripts now run on all sites, so don't restrict to websites domains.
+  if (tab && tab.id && /^https?:\/\//.test(tab.url || "")) {
+    chrome.tabs.sendMessage(tab.id, { type: "APPLY_MODE", mode: next }).catch(() => {});
   }
 });

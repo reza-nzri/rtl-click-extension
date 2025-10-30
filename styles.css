@@ -1,34 +1,34 @@
 /* RTL styles */
-html.chatgpt-rtl-on[dir="rtl"],
-html.chatgpt-rtl-on[dir="rtl"] body { direction: rtl !important; }
+html.rtl-on[dir="rtl"],
+html.rtl-on[dir="rtl"] body { direction: rtl !important; }
 
-html.chatgpt-rtl-on[dir="rtl"] body,
-html.chatgpt-rtl-on[dir="rtl"] [data-message-author-role],
-html.chatgpt-rtl-on[dir="rtl"] .markdown,
-html.chatgpt-rtl-on[dir="rtl"] .prose,
-html.chatgpt-rtl-on[dir="rtl"] .text-message,
-html.chatgpt-rtl-on[dir="rtl"] textarea,
-html.chatgpt-rtl-on[dir="rtl"] input[type="text"],
-html.chatgpt-rtl-on[dir="rtl"] input[type="search"],
-html.chatgpt-rtl-on[dir="rtl"] [contenteditable="true"] {
+html.rtl-on[dir="rtl"] body,
+html.rtl-on[dir="rtl"] [data-message-author-role],
+html.rtl-on[dir="rtl"] .markdown,
+html.rtl-on[dir="rtl"] .prose,
+html.rtl-on[dir="rtl"] .text-message,
+html.rtl-on[dir="rtl"] textarea,
+html.rtl-on[dir="rtl"] input[type="text"],
+html.rtl-on[dir="rtl"] input[type="search"],
+html.rtl-on[dir="rtl"] [contenteditable="true"] {
   direction: rtl !important;
   text-align: right !important;
   unicode-bidi: plaintext !important;
 }
 
 /* LTR styles (forced after RTL) */
-html.chatgpt-ltr-on[dir="ltr"],
-html.chatgpt-ltr-on[dir="ltr"] body { direction: ltr !important; }
+html.ltr-on[dir="ltr"],
+html.ltr-on[dir="ltr"] body { direction: ltr !important; }
 
-html.chatgpt-ltr-on[dir="ltr"] body,
-html.chatgpt-ltr-on[dir="ltr"] [data-message-author-role],
-html.chatgpt-ltr-on[dir="ltr"] .markdown,
-html.chatgpt-ltr-on[dir="ltr"] .prose,
-html.chatgpt-ltr-on[dir="ltr"] .text-message,
-html.chatgpt-ltr-on[dir="ltr"] textarea,
-html.chatgpt-ltr-on[dir="ltr"] input[type="text"],
-html.chatgpt-ltr-on[dir="ltr"] input[type="search"],
-html.chatgpt-ltr-on[dir="ltr"] [contenteditable="true"] {
+html.ltr-on[dir="ltr"] body,
+html.ltr-on[dir="ltr"] [data-message-author-role],
+html.ltr-on[dir="ltr"] .markdown,
+html.ltr-on[dir="ltr"] .prose,
+html.ltr-on[dir="ltr"] .text-message,
+html.ltr-on[dir="ltr"] textarea,
+html.ltr-on[dir="ltr"] input[type="text"],
+html.ltr-on[dir="ltr"] input[type="search"],
+html.ltr-on[dir="ltr"] [contenteditable="true"] {
   direction: ltr !important;
   text-align: left !important;
   unicode-bidi: plaintext !important;
