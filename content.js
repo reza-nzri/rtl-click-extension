@@ -3,7 +3,20 @@
 
 (() => {
   'use strict';
-  const KEY = 'mode';
+
+  // Extract domain from current page URL
+  function getDomain() {
+    try {
+      return new URL(window.location.href).hostname;
+    } catch (e) {
+      return "unknown";
+    }
+  }
+
+  // Get storage key for this domain
+  function getStorageKey() {
+    return `mode_${getDomain()}`;
+  }
 
   function apply(mode) {
     const html = document.documentElement, body = document.body;
@@ -26,16 +39,20 @@
       body.setAttribute('dir', 'ltr');
       html.classList.add('ltr-on');
     }
-    // off → no changes (default site)
+    // OFF mode - no direction changes (default site behavior)
   }
 
   function init() {
-    chrome.storage.sync.get(KEY, r => apply(r[KEY] || 'off'));
+    const key = getStorageKey();
+    chrome.storage.sync.get(key, r => apply(r[key] || 'off'));
+    
     chrome.runtime.onMessage.addListener(msg => {
       if (msg?.type === 'APPLY_MODE') apply(msg.mode);
     });
+    
     chrome.storage.onChanged.addListener(ch => {
-      if (KEY in ch) apply(ch[KEY].newValue || 'off');
+      const key = getStorageKey();
+      if (key in ch) apply(ch[key].newValue || 'off');
     });
   }
 

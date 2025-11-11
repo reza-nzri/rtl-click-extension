@@ -1,59 +1,57 @@
-# <img src="logo-1.png" alt="Websites Direction Toggle Logo" width="25px" style="border-radius:8px; vertical-align:middle;"> **ChatGPT Direction Toggle**
+# <img src="logo-1.png" alt="RTL Click Extension Logo" width="25px" style="border-radius:8px; vertical-align:middle;"> **rtl-click-extension**
 
-A lightweight **Google Chrome Extension** that lets you instantly switch ChatGPT between **LTR ↔ RTL**.  
-Perfect for **Persian, Arabic, Hebrew** users who need proper right-to-left support.
+A lightweight **Google Chrome Extension** that lets you toggle page direction per-site: **LTR ↔ RTL ↔ OFF**.  
+Ideal for users of **Persian, Arabic, Hebrew** and other RTL languages who want per-website control over text direction.
 
 <details>
 <summary><h2>🖥 Demo</h2></summary>
-  
+
 <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/542ea778-334d-4d45-82c2-51aa9c50b5f8" />
 <img width="500" height="514" alt="image" src="https://github.com/user-attachments/assets/26ef73d9-3b57-48db-9ea6-5de9146d7946" />
 <img width="100" height="186" alt="Screenshot 2025-10-04 230338" src="https://github.com/user-attachments/assets/d7f8977b-d9f1-4034-85cc-0ffb4d979b50" />
 
 <details>
   <summary><h3>Explained</h3></summary>
-This extension adds a simple toggle via the **browser toolbar icon**:  
+This extension adds a toggle on the browser toolbar that cycles the current site's direction mode:
 
-* **Click once** → Switch to **RTL** (Right-to-Left).  
-* **Click again** → Switch back to **LTR** (Left-to-Right).  
-* Shows a **green ON badge** when RTL mode is active.  
+* **Click once** → Switch to **RTL** (Right-to-Left).
+* **Click again** → Switch to **LTR** (Left-to-Right).
+* **Click again** → Switch to **OFF** (no changes).
 
-**In short:** read and write in the direction you prefer with a single click.  
+The extension shows a badge and a dynamic icon to indicate the active state for the current website.  
 </details>
 </details>
 
 <details>
 <summary><h2>💡 Why & Benefits</h2></summary>
 
-- Makes ChatGPT much more usable for **RTL languages** (Persian, Arabic, Hebrew).  
-- One-click toggle directly from the browser toolbar.  
-- Works seamlessly with **messages, input box, and editor**.  
-- No external dependencies, no layout breaking.  
+- Provides per-site direction control for RTL languages (Persian, Arabic, Hebrew).
+- One-click toggle from the toolbar that persists per-domain.
+- Non-invasive: only the page direction is changed (no external libraries or heavy DOM rewrites).
 
 </details>
 
 <details>
 <summary><h2>✨ Features</h2></summary>
 
-- Toggle via **extension icon click**.  
-- Badge indicator → shows **ON** when RTL is active.  
-- Persistent setting (remembers last mode).  
-- Compatible with ChatGPT dynamic DOM updates.  
-- Lightweight – no frameworks or extra libraries.  
+- Toggle via **extension icon click** (cycles: OFF → RTL → LTR).
+- Badge indicator shows mode for the active site (e.g. `RTL`, `LTR`).
+- Per-domain persistence: each hostname stores its own mode.
+- Dynamic toolbar icon rendering for visual feedback.
+- Lightweight and framework-free.
 
 </details>
 
 <details>
 <summary><h2>⚙️ Installation</h2></summary>
 
-This is a **local Chrome Extension** (not yet in the Chrome Web Store).  
+This is a **local Chrome Extension** (not yet published to the Chrome Web Store).
 
-1. Clone or download this repository.  
-2. Open Chrome → go to `chrome://extensions/`.  
-3. Enable **Developer mode** (top-right).  
-4. Click **Load unpacked** and select the project folder.  
-5. A new icon appears in your toolbar.  
-6. **Click the icon** to toggle RTL/LTR in ChatGPT.  
+1. Clone or download this repository.
+2. Open Chrome → go to `chrome://extensions/`.
+3. Enable **Developer mode** (top-right).
+4. Click **Load unpacked** and select the project folder.
+5. The extension icon will appear in your toolbar.
 
 </details>
 
@@ -61,23 +59,23 @@ This is a **local Chrome Extension** (not yet in the Chrome Web Store).
 <summary><h2>❓ FAQ</h2></summary>
 
 <details>
-<summary><h3>🔹 Does it affect only ChatGPT?</h3></summary>
-Yes. The extension only runs on <b>chat.openai.com</b> and <b>chatgpt.com</b>.
+<summary><h3>🔹 Does it work on any site?</h3></summary>
+Yes. This extension can run on any website where content scripts are injected (permissioned via the manifest). It applies direction changes per-site.
 </details>
 
 <details>
-<summary><h3>🔹 Does it break the layout?</h3></summary>
-No. It only modifies <b>text direction</b> and <b>alignment</b>.
+<summary><h3>🔹 Will it break page layouts?</h3></summary>
+No — the extension only changes the `dir` attribute and adds small helper classes. Some sites with aggressive CSS may need a reload or manual `off` toggle.
 </details>
 
 <details>
-<summary><h3>🔹 How can I see if RTL is enabled?</h3></summary>
-When RTL mode is ON, the extension icon shows a **green ON badge**.  
+<summary><h3>🔹 How can I tell which mode is active?</h3></summary>
+The toolbar badge and icon show the current mode for the active site (e.g. `RTL`, `LTR`). Hovering the icon shows the site and mode in the tooltip.
 </details>
 
 <details>
-<summary><h3>🔹 Does it save my last choice?</h3></summary>
-Yes. It uses <b>chrome.storage</b> to persist your last setting.  
+<summary><h3>🔹 Does it remember my choices?</h3></summary>
+Yes — each hostname's mode is saved in `chrome.storage.sync` under a `mode_<hostname>` key.
 </details>
 
 </details>
@@ -85,30 +83,28 @@ Yes. It uses <b>chrome.storage</b> to persist your last setting.
 <details>
 <summary><h2>📌 Changelog</h2></summary>
 
-- **v2.0.0** – Migrated from Tampermonkey userscript to full Chrome Extension (Manifest V3).  
-- **v1.1.0** – Improved toggle logic, persistence.  
-- **v1.0.0** – Initial userscript release with button + Alt+R shortcut.  
+- **v2.0** – Per-site persistence, dynamic toolbar icon, tab-aware UI updates.
+- **v1.1** – Toggle and persistence improvements.
+- **v1.0** – Initial release.
 
 </details>
 
 <details>
-<summary><h2>🔑 SEO Keywords</h2></summary>
+<summary><h2>🔑 Keywords</h2></summary>
 
-chatgpt rtl, chatgpt chrome extension, chatgpt rtl extension, rtl support chatgpt, persian arabic hebrew chatgpt, chatgpt direction toggle extension, chatgpt ltr rtl switch  
+rtl, rtl chrome extension, rtl ltr toggle, rtl per-site, rtl-click-extension, persian arabic hebrew
 
 </details>
 
 <details>
 <summary><h3>⚠️ Disclaimer</h3></summary>
 
-This project is created **for educational and personal use only**.  
-It is not affiliated with, endorsed by, or connected to **OpenAI** or **ChatGPT**.  
-Use at your own risk. The author assumes no responsibility for any consequences arising from its use.  
+This project is provided for educational and personal use. It is not affiliated with or endorsed by any third-party service. Use at your own risk.
 
 </details>
 
 ### 🤝 Contributing
 
-Contributions, bug reports, and feature ideas are welcome!  
+Contributions, bug reports, and feature requests are welcome.
 
-[![Sasha](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/127698692?v=4&w=35&h=35&mask=circle)](https://github.com/reza-nzri)
+[![Author](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/127698692?v=4&w=35&h=35&mask=circle)](https://github.com/reza-nzri)
