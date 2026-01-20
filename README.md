@@ -16,9 +16,11 @@ This extension adds a toggle on the browser toolbar that cycles the current site
 
 * **Click once** → Switch to **RTL** (Right-to-Left).
 * **Click again** → Switch to **LTR** (Left-to-Right).
+* **Click again** → Switch to **DYN** (Dynamic per-block RTL/LTR).
 * **Click again** → Switch to **OFF** (no changes).
 
-The extension shows a badge and a dynamic icon to indicate the active state for the current website.  
+The extension shows a badge and a dynamic icon to indicate the active state for the current website:
+- `RTL` / `LTR` / `DYN`
 </details>
 </details>
 
@@ -39,6 +41,8 @@ The extension shows a badge and a dynamic icon to indicate the active state for 
 - Per-domain persistence: each hostname stores its own mode.
 - Dynamic toolbar icon rendering for visual feedback.
 - Lightweight and framework-free.
+- New **DYN mode**: automatically sets direction per paragraph/block based on text content (RTL vs LTR).
+- True **OFF mode**: restores original page direction and removes all extension-applied changes.
 
 </details>
 
@@ -70,7 +74,7 @@ No — the extension only changes the `dir` attribute and adds small helper clas
 
 <details>
 <summary><h3>🔹 How can I tell which mode is active?</h3></summary>
-The toolbar badge and icon show the current mode for the active site (e.g. `RTL`, `LTR`). Hovering the icon shows the site and mode in the tooltip.
+The toolbar badge and icon show the current mode for the active site (e.g. `RTL`, `LTR`, `DYN`). Hovering the icon shows the site and mode in the tooltip.
 </details>
 
 <details>
@@ -78,11 +82,22 @@ The toolbar badge and icon show the current mode for the active site (e.g. `RTL`
 Yes — each hostname's mode is saved in `chrome.storage.sync` under a `mode_<hostname>` key.
 </details>
 
+<details>
+<summary><h3>🔹 What is DYN mode?</h3></summary>
+DYN (Dynamic) scans text blocks (e.g. paragraphs, list items, headings) and sets `dir="rtl"` or `dir="ltr"` per block based on the dominant script. It does not force the whole page direction.
+</details>
+
+<details>
+<summary><h3>🔹 What does OFF mode do exactly?</h3></summary>
+OFF fully restores the original page direction (previous `dir` values) and removes all extension-applied changes, so the page behaves as if the extension was not active.
+</details>
+
 </details>
 
 <details>
 <summary><h2>📌 Changelog</h2></summary>
 
+- **v2.1** – True OFF restore + new DYN (dynamic per-block direction) mode.
 - **v2.0** – Per-site persistence, dynamic toolbar icon, tab-aware UI updates.
 - **v1.1** – Toggle and persistence improvements.
 - **v1.0** – Initial release.
