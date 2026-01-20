@@ -1,6 +1,15 @@
 // Background service worker
 // Handles icon clicks and updates the mode + dynamic icon text
 
+async function tabExists(tabId) {
+  try {
+    await chrome.tabs.get(tabId);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // Extract domain from URL
 function getDomain(url) {
   try {
@@ -79,6 +88,10 @@ function drawIcon(label, opts) {
 }
 
 async function updateUI(mode, domain = "unknown", tabId = null) {
+  if (tabId && !(await tabExists(tabId))) {
+  return;
+  }
+
   // Update icon, badge and tooltip for a specific tab (if tabId provided)
   // If tabId is omitted, update the global action (fallback)
   const imageData =
@@ -178,7 +191,7 @@ async function updateUI(mode, domain = "unknown", tabId = null) {
       });
     }
   } catch (err) {
-    console.error("updateUI error", err);
+  console.error("updateUI error", err);
   }
 }
 
@@ -271,3 +284,4 @@ chrome.action.onClicked.addListener(async (tab) => {
       .catch(() => {});
   }
 });
+
