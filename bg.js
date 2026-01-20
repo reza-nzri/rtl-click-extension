@@ -30,7 +30,7 @@ async function getMode() {
   return r["mode"] || "off";
 }
 async function setMode(m) {
-  await chrome.storage.sync.set({ "mode": m });
+  await chrome.storage.sync.set({ mode: m });
 }
 
 function drawIcon(label, opts) {
@@ -81,11 +81,14 @@ function drawIcon(label, opts) {
 async function updateUI(mode, domain = "unknown", tabId = null) {
   // Update icon, badge and tooltip for a specific tab (if tabId provided)
   // If tabId is omitted, update the global action (fallback)
-  const imageData = mode === "rtl"
-    ? drawIcon("RTL", { border: "#00cc66", text: "#ffffff" })
-    : mode === "ltr"
-      ? drawIcon("LTR", { border: "#999999", text: "#ffffff" })
-      : null;
+  const imageData =
+    mode === "rtl"
+      ? drawIcon("RTL", { border: "#00cc66", text: "#ffffff" })
+      : mode === "ltr"
+        ? drawIcon("LTR", { border: "#999999", text: "#ffffff" })
+        : mode === "dyn"
+          ? drawIcon("DYN", { border: "#ffffff", text: "#000000" })
+          : null;
 
   const setIconArgs = imageData ? { imageData } : {};
   if (tabId) setIconArgs.tabId = tabId;
@@ -97,38 +100,85 @@ async function updateUI(mode, domain = "unknown", tabId = null) {
     } else {
       // No imageData for OFF mode - clear to default icon
       if (tabId) {
-        try { await chrome.action.setIcon({ tabId }); } catch (e) { console.warn('clear tab icon failed', e); }
+        try {
+          await chrome.action.setIcon({ tabId });
+        } catch (e) {
+          console.warn("clear tab icon failed", e);
+        }
       } else {
-        try { await chrome.action.setIcon({}); } catch (e) { console.warn('clear global icon failed', e); }
+        try {
+          await chrome.action.setIcon({});
+        } catch (e) {
+          console.warn("clear global icon failed", e);
+        }
       }
     }
   } catch (err) {
     // OffscreenCanvas icon setting may fail on some platforms — badge is more reliable
-    console.warn('setIcon failed', err);
+    console.warn("setIcon failed", err);
   }
 
   // Badge and title (tab-scoped if supported)
   const badgeArgs = tabId ? { tabId } : {};
-  console.log(`updateUI called — mode=${mode}, domain=${domain}, tabId=${tabId}`);
+  console.log(
+    `updateUI called — mode=${mode}, domain=${domain}, tabId=${tabId}`,
+  );
 
   try {
     if (mode === "rtl") {
       console.log("setting RTL UI");
-      await chrome.action.setBadgeText({ text: "RTL", ...(badgeArgs) });
-      try { await chrome.action.setBadgeBackgroundColor({ color: "#00cc66", ...(badgeArgs) }); } catch (e) { console.warn('setBadgeBackgroundColor failed', e); }
-      await chrome.action.setTitle({ title: `[${domain}]\nMode: RTL (click for LTR)`, ...(badgeArgs) });
+      await chrome.action.setBadgeText({ text: "RTL", ...badgeArgs });
+      try {
+        await chrome.action.setBadgeBackgroundColor({
+          color: "#00cc66",
+          ...badgeArgs,
+        });
+      } catch (e) {
+        console.warn("setBadgeBackgroundColor failed", e);
+      }
+      await chrome.action.setTitle({
+        title: `[${domain}]\nMode: RTL (click for LTR)`,
+        ...badgeArgs,
+      });
     } else if (mode === "ltr") {
       console.log("setting LTR UI");
-      await chrome.action.setBadgeText({ text: "LTR", ...(badgeArgs) });
-      try { await chrome.action.setBadgeBackgroundColor({ color: "#999999", ...(badgeArgs) }); } catch (e) { console.warn('setBadgeBackgroundColor failed', e); }
-      await chrome.action.setTitle({ title: `[${domain}]\nMode: LTR (click for OFF)`, ...(badgeArgs) });
+      await chrome.action.setBadgeText({ text: "LTR", ...badgeArgs });
+      try {
+        await chrome.action.setBadgeBackgroundColor({
+          color: "#999999",
+          ...badgeArgs,
+        });
+      } catch (e) {
+        console.warn("setBadgeBackgroundColor failed", e);
+      }
+      await chrome.action.setTitle({
+        title: `[${domain}]\nMode: LTR (click for OFF)`,
+        ...badgeArgs,
+      });
+    } else if (mode === "dyn") {
+      await chrome.action.setBadgeText({ text: "DYN", ...badgeArgs });
+
+      try {
+        await chrome.action.setBadgeBackgroundColor({
+          color: "#111111",
+          ...badgeArgs,
+        });
+      } catch (e) {}
+
+      await chrome.action.setTitle({
+        title: `[${domain}]\nMode: DYN (click for OFF)`,
+        ...badgeArgs,
+      });
     } else {
       console.log("setting OFF UI");
-      await chrome.action.setBadgeText({ text: "", ...(badgeArgs) });
-      await chrome.action.setTitle({ title: `[${domain}]\nMode: OFF (click for RTL)`, ...(badgeArgs) });
+      await chrome.action.setBadgeText({ text: "", ...badgeArgs });
+      await chrome.action.setTitle({
+        title: `[${domain}]\nMode: OFF (click for RTL)`,
+        ...badgeArgs,
+      });
     }
   } catch (err) {
-    console.error('updateUI error', err);
+    console.error("updateUI error", err);
   }
 }
 
@@ -139,8 +189,8 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
     const tab = await chrome.tabs.get(activeInfo.tabId);
     if (tab?.url && /^https?:\/\//.test(tab.url)) {
       const domain = getDomain(tab.url);
-  const mode = await getModeForDomain(domain);
-  await updateUI(mode, domain, tab.id);
+      const mode = await getModeForDomain(domain);
+      await updateUI(mode, domain, tab.id);
     }
   } catch (e) {
     // Tab might be closed or inaccessible
@@ -150,17 +200,24 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 // Listener for updating icon when page URL changes
 // Ensures the correct mode is displayed when navigating to a new URL
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  if (changeInfo.status === "loading" && tab?.url && /^https?:\/\//.test(tab.url)) {
-  const domain = getDomain(tab.url);
-  const mode = await getModeForDomain(domain);
-  await updateUI(mode, domain, tabId);
+  if (
+    changeInfo.status === "loading" &&
+    tab?.url &&
+    /^https?:\/\//.test(tab.url)
+  ) {
+    const domain = getDomain(tab.url);
+    const mode = await getModeForDomain(domain);
+    await updateUI(mode, domain, tabId);
   }
 });
 
 chrome.runtime.onInstalled.addListener(async () => {
   // Refresh UI for the active tab on install so icon reflects current site
   try {
-    const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    const tabs = await chrome.tabs.query({
+      active: true,
+      lastFocusedWindow: true,
+    });
     if (tabs && tabs[0] && tabs[0].url && /^https?:\/\//.test(tabs[0].url)) {
       const domain = getDomain(tabs[0].url);
       const mode = await getModeForDomain(domain);
@@ -168,14 +225,17 @@ chrome.runtime.onInstalled.addListener(async () => {
       console.log("onInstalled: UI refreshed for", domain);
     }
   } catch (e) {
-    console.warn('onInstalled UI refresh failed', e);
+    console.warn("onInstalled UI refresh failed", e);
   }
 });
 
 // On startup, refresh UI for the active tab
 chrome.runtime.onStartup?.addListener?.(async () => {
   try {
-    const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    const tabs = await chrome.tabs.query({
+      active: true,
+      lastFocusedWindow: true,
+    });
     if (tabs && tabs[0] && tabs[0].url && /^https?:\/\//.test(tabs[0].url)) {
       const domain = getDomain(tabs[0].url);
       const mode = await getModeForDomain(domain);
@@ -183,7 +243,7 @@ chrome.runtime.onStartup?.addListener?.(async () => {
       console.log("onStartup: UI refreshed for", domain);
     }
   } catch (e) {
-    console.warn('onStartup UI refresh failed', e);
+    console.warn("onStartup UI refresh failed", e);
   }
 });
 
@@ -192,13 +252,22 @@ chrome.action.onClicked.addListener(async (tab) => {
 
   const domain = getDomain(tab.url);
   const current = await getModeForDomain(domain);
-  const next = current === "off" ? "rtl" : current === "rtl" ? "ltr" : "off";
-  
+  const next =
+    current === "off"
+      ? "rtl"
+      : current === "rtl"
+        ? "ltr"
+        : current === "ltr"
+          ? "dyn"
+          : "off";
+
   await setModeForDomain(domain, next);
   await updateUI(next, domain, tab.id);
 
   // Send the new mode to the active tab for immediate application
   if (/^https?:\/\//.test(tab.url || "")) {
-    chrome.tabs.sendMessage(tab.id, { type: "APPLY_MODE", mode: next, domain: domain }).catch(() => {});
+    chrome.tabs
+      .sendMessage(tab.id, { type: "APPLY_MODE", mode: next, domain: domain })
+      .catch(() => {});
   }
 });

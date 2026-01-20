@@ -33,3 +33,9 @@ html.ltr-on[dir="ltr"] [contenteditable="true"] {
   text-align: left !important;
   unicode-bidi: plaintext !important;
 }
+
+/* DYN mode hook (optional) */
+html.dyn-on [data-rtlclick-dyn] {unicode-bidi: plaintext !important;}
+html.dyn-on [data-rtlclick-dyn][dir="rtl"] { text-align: right !important; }
+html.dyn-on [data-rtlclick-dyn][dir="ltr"] { text-align: left !important; }
+
