@@ -6,7 +6,9 @@ Ideal for users of **Persian, Arabic, Hebrew** and other RTL languages who want 
 <details>
 <summary><h2>🖥 Demo</h2></summary>
 
-https://github.com/user-attachments/assets/cf2cd376-495a-4a41-9864-f86b88c46536
+https://github.com/user-attachments/assets/cf2cd376-495a-4a41-9864-f86b88c46536  
+
+<img width="200" height="auto" alt="1" src="https://github.com/user-attachments/assets/5f25b266-012d-4f20-8871-483b04527255" />
 
 <details>
   <summary><h3>Explained</h3></summary>
