@@ -1,6 +1,21 @@
 // Background service worker
 // Handles icon clicks and updates the mode + dynamic icon text
 
+async function safeAction(fn) {
+  try {
+    await fn();
+  } catch (e) {
+    if (
+      e?.message?.includes("No tab with id") ||
+      e?.message?.includes("Invalid tab ID")
+    ) {
+      // tab was closed or no longer exists — safe to ignore
+      return;
+    }
+    throw e;
+  }
+}
+
 async function tabExists(tabId) {
   try {
     await chrome.tabs.get(tabId);
@@ -88,8 +103,8 @@ function drawIcon(label, opts) {
 }
 
 async function updateUI(mode, domain = "unknown", tabId = null) {
-  if (tabId && !(await tabExists(tabId))) {
-  return;
+  if (Number.isInteger(tabId) && !(await tabExists(tabId))) {
+    return;
   }
 
   // Update icon, badge and tooltip for a specific tab (if tabId provided)
@@ -108,22 +123,12 @@ async function updateUI(mode, domain = "unknown", tabId = null) {
 
   try {
     if (imageData) {
-      // Set icon for the tab or globally
-      await chrome.action.setIcon(setIconArgs);
+      await safeAction(() => chrome.action.setIcon(setIconArgs));
     } else {
-      // No imageData for OFF mode - clear to default icon
       if (tabId) {
-        try {
-          await chrome.action.setIcon({ tabId });
-        } catch (e) {
-          console.warn("clear tab icon failed", e);
-        }
+        await safeAction(() => chrome.action.setIcon({ tabId }));
       } else {
-        try {
-          await chrome.action.setIcon({});
-        } catch (e) {
-          console.warn("clear global icon failed", e);
-        }
+        await safeAction(() => chrome.action.setIcon({}));
       }
     }
   } catch (err) {
@@ -140,58 +145,86 @@ async function updateUI(mode, domain = "unknown", tabId = null) {
   try {
     if (mode === "rtl") {
       console.log("setting RTL UI");
-      await chrome.action.setBadgeText({ text: "RTL", ...badgeArgs });
+      await safeAction(() =>
+        chrome.action.setBadgeText({ text: "RTL", ...badgeArgs }),
+      );
       try {
-        await chrome.action.setBadgeBackgroundColor({
-          color: "#00cc66",
-          ...badgeArgs,
-        });
+        await safeAction(() =>
+          chrome.action.setBadgeBackgroundColor({
+            color: "#00cc66",
+            ...badgeArgs,
+          }),
+        );
       } catch (e) {
         console.warn("setBadgeBackgroundColor failed", e);
       }
-      await chrome.action.setTitle({
-        title: `[${domain}]\nMode: RTL (click for LTR)`,
-        ...badgeArgs,
-      });
+      await safeAction(() =>
+        chrome.action.setTitle({
+          title: `[${domain}]\nMode: RTL (click for LTR)`,
+          ...badgeArgs,
+        }),
+      );
     } else if (mode === "ltr") {
       console.log("setting LTR UI");
-      await chrome.action.setBadgeText({ text: "LTR", ...badgeArgs });
+      await safeAction(() =>
+        chrome.action.setBadgeText({ text: "LTR", ...badgeArgs }),
+      );
       try {
-        await chrome.action.setBadgeBackgroundColor({
-          color: "#999999",
-          ...badgeArgs,
-        });
+        await safeAction(() =>
+          chrome.action.setBadgeBackgroundColor({
+            color: "#999999",
+            ...badgeArgs,
+          }),
+        );
       } catch (e) {
         console.warn("setBadgeBackgroundColor failed", e);
       }
-      await chrome.action.setTitle({
-        title: `[${domain}]\nMode: LTR (click for OFF)`,
-        ...badgeArgs,
-      });
+      await safeAction(() =>
+        chrome.action.setTitle({
+          title: `[${domain}]\nMode: LTR (click for OFF)`,
+          ...badgeArgs,
+        }),
+      );
     } else if (mode === "dyn") {
-      await chrome.action.setBadgeText({ text: "DYN", ...badgeArgs });
+      await safeAction(() =>
+        chrome.action.setBadgeText({ text: "DYN", ...badgeArgs }),
+      );
 
       try {
-        await chrome.action.setBadgeBackgroundColor({
-          color: "#111111",
-          ...badgeArgs,
-        });
+        await safeAction(() =>
+          chrome.action.setBadgeBackgroundColor({
+            color: "#111111",
+            ...badgeArgs,
+          }),
+        );
       } catch (e) {}
 
-      await chrome.action.setTitle({
-        title: `[${domain}]\nMode: DYN (click for OFF)`,
-        ...badgeArgs,
-      });
+      await safeAction(() =>
+        chrome.action.setTitle({
+          title: `[${domain}]\nMode: DYN (click for OFF)`,
+          ...badgeArgs,
+        }),
+      );
     } else {
       console.log("setting OFF UI");
-      await chrome.action.setBadgeText({ text: "", ...badgeArgs });
-      await chrome.action.setTitle({
-        title: `[${domain}]\nMode: OFF (click for RTL)`,
-        ...badgeArgs,
-      });
+      await safeAction(() =>
+        chrome.action.setBadgeText({ text: "", ...badgeArgs }),
+      );
+      await safeAction(() =>
+        chrome.action.setTitle({
+          title: `[${domain}]\nMode: OFF (click for RTL)`,
+          ...badgeArgs,
+        }),
+      );
     }
   } catch (err) {
-  console.error("updateUI error", err);
+    if (
+      err?.message?.includes("No tab with id") ||
+      err?.message?.includes("Invalid tab ID")
+    ) {
+      return;
+    }
+    console.error("updateUI error", err);
   }
 }
 
@@ -284,4 +317,3 @@ chrome.action.onClicked.addListener(async (tab) => {
       .catch(() => {});
   }
 });
-
